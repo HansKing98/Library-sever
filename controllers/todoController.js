@@ -1,18 +1,26 @@
 var config = require('../config')
-
+var request = require('request');
+var querystring = require('querystring');
 var bodyParser = require('body-parser')
-
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
-
 var mongoose = require('mongoose');
 
-mongoose.connect('mongodb+srv://' + config.srv + '/' +'Library', {useNewUrlParser: true});
 
+mongoose.connect('mongodb+srv://' + config.srv + '/' +'Library', {useNewUrlParser: true});
+// books
 var bookSchema = new mongoose.Schema({
     msg: String
 });
 // Library 集群 book 集合 默认变复数 books
 var Book = mongoose.model('book', bookSchema);
+
+// users 
+var userSchema = new mongoose.Schema({
+    openid: String,
+    session_key: String,
+    userInfo:Object
+});
+var User = mongoose.model('user', userSchema);
 
 module.exports = function(app) {
     app.get('/weapp/demo', function(req, res) {
@@ -21,6 +29,55 @@ module.exports = function(app) {
             res.send(data);
         })
     });
+
+
+    app.get('/weapp/jscode2session', function(req, res) {
+        var url = 'https://api.weixin.qq.com/sns/jscode2session'
+        var data = {
+            appid: req.query.appid,
+            secret: req.query.secret,
+            js_code: req.query.code,
+            grant_type: req.query.grant_type
+        }
+        var content = querystring.stringify(data);
+        url = url + '?' + content
+        // console.log(url);
+        request(url + content , function (error, response, body) {
+          if (!error && response.statusCode == 200) {
+            console.log(body) // 请求成功的处理逻辑
+            res.send(body)
+          }
+        })
+    })
+
+
+    app.get('/weapp/login', function(req, res) {
+        if (req.query.openid) {
+            var itemOne = User({
+                openid: req.query.openid,
+                session_key: req.query.session_key,
+                userInfo:req.query.userInfo
+            }).save(function (err, data) {
+                if (err) throw err;
+                console.log('user saved');
+            })
+        }
+        
+        User.find({},function(err, data) {
+            if (err) throw err;
+            res.send(data);
+        })
+    });
+
+
+
+
+
+
+
+
+
+
 
     app.get('/todo', function(req, res) {
         Book.find({},function(err, data) {
