@@ -32,6 +32,7 @@ module.exports = function(app) {
 
 
     app.get('/weapp/jscode2session', function(req, res) {
+        console.log('jscode2session 执行。。。');
         var url = 'https://api.weixin.qq.com/sns/jscode2session'
         var data = {
             appid: req.query.appid,
@@ -46,27 +47,41 @@ module.exports = function(app) {
           if (!error && response.statusCode == 200) {
             console.log(body) // 请求成功的处理逻辑
             res.send(body)
+            console.log('jscode2session 完成');
           }
         })
     })
 
 
-    app.get('/weapp/login', function(req, res) {
+    app.get('/weapp/login',async function(req, res) {
+        console.log('join 执行。。。');
         if (req.query.openid) {
-            var itemOne = User({
-                openid: req.query.openid,
-                session_key: req.query.session_key,
-                userInfo:req.query.userInfo
-            }).save(function (err, data) {
+            const usered =  await User.find({ openid:req.query.openid })
+            // console.log(usered);
+            // console.log(usered)
+            // console.log(usered[0].openid)
+            if (usered[0]) {
+                console.log('登录成功');
+                res.send({code:200, msg:'登录成功'})
+            }else{
+                
+                User({
+                    openid: req.query.openid,
+                    session_key: req.query.session_key,
+                    userInfo:req.query.userInfo
+                }).save(function (err, data) {
+                    if (err) throw err;
+                    console.log('用户添加成功');
+                    res.send({code:200, msg:'用户添加成功'})
+                })
+            }
+        }else{
+            User.find({},function(err, data) {
                 if (err) throw err;
-                console.log('user saved');
+                res.send(data);
             })
         }
-        
-        User.find({},function(err, data) {
-            if (err) throw err;
-            res.send(data);
-        })
+        console.log('join 完成');
     });
 
 
