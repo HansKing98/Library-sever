@@ -1,15 +1,21 @@
-var express = require('express');
-var todoController = require('./controllers/todoController');
+const Koa = require('koa')
+const bodyparser = require('koa-bodyparser')
+const response = require('./response.js')
+const app = new Koa()
 
-var app = express();
+// 使用响应处理中间件
+app.use(response)
 
-app.set('view engine', 'ejs');
+// 解析请求体
+app.use(bodyparser())
 
-// 静态类 直接访问
-app.use(express.static('./public'));
+const router = require('./routes')
+app.use(router.routes())
+// 
+const weAppRouter = require('./routes/weapp')
+app.use(weAppRouter.routes())
 
-todoController(app);
-
-app.listen(5757);
-
-console.log('You are listening to port 5757');
+// 启动程序，监听端口
+app.listen(5757, () => {
+  console.log('localhost:5757,服务器启动成功')
+})

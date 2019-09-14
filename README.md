@@ -1,9 +1,9 @@
 # Library-sever
 
-// confif.js
-const user = '***'
-const pass = '***'
-const url = '***-rxhla.mongodb.net'
-const srv = user + ":" + pass + "@" + url
+> Library-sever
+``` bash
 
-exports.srv =srv
+# 启动
+npm run start
+
+```
