@@ -9,11 +9,11 @@ app.use(response)
 // 解析请求体
 app.use(bodyparser())
 
-const router = require('./routes')
-app.use(router.routes())
-// 
+// 引入路由分发
 const weAppRouter = require('./routes/weapp')
 app.use(weAppRouter.routes())
+const webRouter = require('./routes/web')
+app.use(webRouter.routes())
 
 // 启动程序，监听端口
 app.listen(5757, () => {

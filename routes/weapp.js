@@ -5,18 +5,17 @@ const router = require('koa-router')({
   prefix: '/weapp'
 })
 
-const controllers = require('../controllers/')
-const Weapp = controllers.weapp
+const controllers = require('../controllers/weapp')
 
 // Auth 授权路由组
-router.get('/html', Weapp.html)
+router.get('/html', controllers.html)
 
-router.post('/addbook', Weapp.addbook)
+router.post('/addbook', controllers.addbook)
 
-router.get('/booklist', Weapp.booklist)
+router.get('/booklist', controllers.booklist)
 
-router.get('/bookdetail', Weapp.bookdetail)
+router.get('/bookdetail', controllers.bookdetail)
 
-router.get('/top', Weapp.top)
+router.get('/top', controllers.top)
 
 module.exports = router
