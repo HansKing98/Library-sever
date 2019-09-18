@@ -9,5 +9,6 @@ const controllers = require('../controllers/web')
 
 // Auth 授权路由组
 router.get('/html', controllers.html)
+router.get('/booklist', controllers.booklist)
 
 module.exports = router

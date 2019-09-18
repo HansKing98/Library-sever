@@ -8,7 +8,7 @@ module.exports = async (ctx) => {
     // console.log(appid,secret,code)
     var url = url + "?appid="+ appid +"&secret="+ secret +"&js_code="+ code +"&grant_type=authorization_code"
     const code2session = await getJSON(url)
-    
+
     ctx.state = {
         data:code2session
     }

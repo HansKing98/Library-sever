@@ -10,6 +10,8 @@ app.use(response)
 app.use(bodyparser())
 
 // 引入路由分发
+const ApiRouter = require('./routes/api')
+app.use(ApiRouter.routes())
 const weAppRouter = require('./routes/weapp')
 app.use(weAppRouter.routes())
 const webRouter = require('./routes/web')
