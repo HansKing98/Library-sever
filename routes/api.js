@@ -15,6 +15,9 @@ const router = require('koa-router')({
   router.get('/bookdetail', controllers.bookdetail)
   router.get('/douban', controllers.douban)
   router.get('/top', controllers.top)
+
+  router.get('/getdaan', controllers.getdaan)
+  router.get('/getphone', controllers.getphone)
   
 
   // Wx 路由组
